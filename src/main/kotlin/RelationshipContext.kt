@@ -9,12 +9,14 @@ fun main(){
     })
     val scope = CoroutineScope(coroutineExceptionHandler)
 
-    scope.launch {
+    //so that the error is not propogated and cancels the second job
+    scope.launch(SupervisorJob()) {
         println("launching of scope 1")
         val job = async {
             delay(2000)
             println("printing from inside of the async of job 1")
             println("doing some heavy jobs inside co-rountines inside job1")
+            throw IllegalStateException("Some illegal state")
         }
         val job1 = async {
             delay(5000)
@@ -27,12 +29,13 @@ fun main(){
 
     scope.launch {
         println("launching the second coroutine:")
-        val job12 = async {
+        val job = async {
             delay(3000)
             println("launching the second coroutine job:")
         }
-        job12.await()
+        job.await()
     }
 
-    Thread.sleep(10000L)
+    //hold the app until all parallel excution gets completed.
+    Thread.sleep(15000L)
 }
