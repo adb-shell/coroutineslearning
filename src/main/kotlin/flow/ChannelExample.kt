@@ -12,7 +12,7 @@ fun main(){
     val channel = sample()
     scope.launch {
         for (y in channel){
-            println("RECEIVING ITEMS ${y}")
+            println("RECEIVING ITEMS $y")
         }
     }
     Thread.sleep(15000L)
